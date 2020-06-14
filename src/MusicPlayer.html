@@ -35,7 +35,7 @@
             <div class='song_wrapper'>
                 <ul class="song_list">
                     <li v-show="songCount>0">
-                        <button v-show="musicOffset>1" @click="getMusic('prev')">上一页</button>
+                        <button v-show="musicOffset>2" @click="getMusic('prev')">上一页</button>
                         &nbsp;&nbsp;
                         <button v-show="musicOffset<(songCount/30)" @click="getMusic('next')">下一页</button></li>
                     <li v-for="music in musicList">
@@ -60,24 +60,17 @@
 
             <!-- 评论容器 -->
             <div class="comment_wrapper">
-                <h5 class='title'>热门留言</h5>
+                <h5 class='title'>热门留言:{{hotCommentsArray.length}}条</h5>
                 <div class='comment_list'>
                     <!--热评-->
-                    <dl>
-                        <dt><img src="./images/person.png" alt=""></dt>
-                        <dd class="name">盐焗西兰花</dd>
-                        <dd class="detail">
+                    <dl v-for="comment in hotCommentsArray">
+                        <dt><img v-bind:src="comment.user.avatarUrl" alt=""></dt>
+                        <dd class="name" v-text="comment.user.nickname">盐焗西兰花</dd>
+                        <dd class="detail" v-text="comment.content">
                             绝对值得一听，吹爆
                         </dd>
                     </dl>
-                    <!--普通评论-->
-                    <dl>
-                        <dt><img src="./images/person.png" alt=""></dt>
-                        <dd class="name">盐焗西兰花</dd>
-                        <dd class="detail">
-                            绝对值得一听，吹爆
-                        </dd>
-                    </dl>
+
                 </div>
                 <img src="images/line.png" class="right_line">
             </div>

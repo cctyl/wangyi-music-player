@@ -37,9 +37,11 @@ var app = new Vue({
         commentOffset: 1,
         picUrl:"",
         baseUrl:"http://localhost:3000/",
-        musicId:""
+        musicId:"",
+        hotCommentsArray:[]
     },
     methods: {
+        //歌曲搜索
         getMusic(method) {
             var vue = this;
             if (method == 'prev') {
@@ -68,6 +70,7 @@ var app = new Vue({
         //获取歌曲详情
         getMusicDetail(musicId) {
             var vue = this;
+            vue.musicId = musicId;
             //获取歌曲url
             axios.get(vue.baseUrl+"song/url?id=" + musicId).then(
                 function (response) {
@@ -85,7 +88,7 @@ var app = new Vue({
 
 
                     var album = response.data.songs[0].al;
-                    console.log(album);
+
                     vue.picUrl = album.picUrl;
 
                 },
@@ -94,14 +97,28 @@ var app = new Vue({
                 }
             );
 
-
+            vue.getMusicComment(musicId);
 
         },
 
         //获取歌曲评论
-        getMusicComment(musicId=this.musicId) {
+        getMusicComment(musicId,method) {
+
+            var vue = this;
+            if (method == 'prev') {
+                vue.commentOffset--;
+            } else {
+                vue.commentOffset++;
+            }
             //获取歌曲评论
-            axios.get(vue.baseUrl+"/comment/music?id="+musicId+"&limit=20&offset").then();
+            axios.get(vue.baseUrl+"comment/hot?id="+musicId+"&limit=20&offset="+vue.commentOffset+"&type=0").then(
+                function (response) {
+
+                    vue.hotCommentsArray = response.data.hotComments;
+                    console.log(response.data.hotComments);
+                }
+
+            );
         }
     }
 });
