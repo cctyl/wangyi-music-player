@@ -30,16 +30,19 @@ var app = new Vue({
     el: "#player",
     data: {
         query: "",
+
         musicList: [],
         songCount: 0,
         musicUrl: "",
         musicOffset: 1,
         commentOffset: 1,
-        picUrl:"",
-        baseUrl:"http://localhost:3000/",
-        musicId:"",
-        hotCommentsArray:[],
-        isPlay:false
+        picUrl: "",
+        baseUrl: "http://localhost:3000/",
+        musicId: "",
+        hotCommentsArray: [],
+        isPlay: false,
+        mvUrl: "",
+        isShow: false
     },
     methods: {
         //歌曲搜索
@@ -50,7 +53,7 @@ var app = new Vue({
             } else {
                 vue.musicOffset++;
             }
-            axios.get(vue.baseUrl+"search?keywords=" + vue.query + "&limit=30&offset=" + vue.musicOffset).then(
+            axios.get(vue.baseUrl + "search?keywords=" + vue.query + "&limit=30&offset=" + vue.musicOffset).then(
                 function (response) {
                     if (response == undefined) {
                         return;
@@ -73,7 +76,7 @@ var app = new Vue({
             var vue = this;
             vue.musicId = musicId;
             //获取歌曲url
-            axios.get(vue.baseUrl+"song/url?id=" + musicId).then(
+            axios.get(vue.baseUrl + "song/url?id=" + musicId).then(
                 function (response) {
                     var detail = response.data.data[0];
                     vue.musicUrl = detail.url;
@@ -84,7 +87,7 @@ var app = new Vue({
             );
 
             //获取歌曲封面
-            axios.get(vue.baseUrl+"song/detail?ids=" + musicId).then(
+            axios.get(vue.baseUrl + "song/detail?ids=" + musicId).then(
                 function (response) {
 
 
@@ -103,7 +106,7 @@ var app = new Vue({
         },
 
         //获取歌曲评论
-        getMusicComment(musicId,method) {
+        getMusicComment(musicId, method) {
 
             var vue = this;
             if (method == 'prev') {
@@ -112,17 +115,32 @@ var app = new Vue({
                 vue.commentOffset++;
             }
             //获取歌曲评论
-            axios.get(vue.baseUrl+"comment/hot?id="+musicId+"&limit=20&offset="+vue.commentOffset+"&type=0").then(
+            axios.get(vue.baseUrl + "comment/hot?id=" + musicId + "&limit=20&offset=" + vue.commentOffset + "&type=0").then(
                 function (response) {
 
                     vue.hotCommentsArray = response.data.hotComments;
-                    console.log(response.data.hotComments);
                 }
-
             );
         },
-        play(){
-            this.isPlay=!this.isPlay;
+        //切换动画效果
+        play() {
+            this.isPlay = !this.isPlay;
+        },
+        playMV(mvid) {
+            var vue = this;
+            axios.get(vue.baseUrl + "mv/url?id=" + mvid).then(
+                function (resoponse) {
+                    vue.mvUrl = resoponse.data.data.url;
+                    vue.isShow = true;
+                }
+            );
+
+        },
+        hide(){
+
+            this.isShow = false;
+            this.mvUrl="";
         }
+
     }
 });

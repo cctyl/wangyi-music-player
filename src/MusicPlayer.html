@@ -38,9 +38,11 @@
                         <button v-show="musicOffset>2" @click="getMusic('prev')">上一页</button>
                         &nbsp;&nbsp;
                         <button v-show="musicOffset<(songCount/30)" @click="getMusic('next')">下一页</button></li>
+
                     <li v-for="music in musicList">
                         <a href="#" @click="getMusicDetail(music.id)" ></a>
                         <b v-text="music.name">你好</b>
+                        <span v-if="music.mvid!=0"><i @click="playMV(music.mvid)"></i></span>
                     </li>
 
                     <li>搜索到的音乐数量：{{songCount}}</li>
@@ -81,9 +83,9 @@
             <audio ref='audio' @play="play" @pause="play"  v-bind:src="musicUrl" controls autoplay loop class="myaudio"></audio>
         </div>
 
-        <div class="video_con" style="display: none;">
-            <video controls="controls"></video>
-            <div class="mask"></div>
+        <div class="video_con" v-show="isShow" style="display: none;">
+            <video controls="controls" v-bind:src="mvUrl"></video>
+            <div class="mask" @click="hide"></div>
         </div>
 
     </div>
