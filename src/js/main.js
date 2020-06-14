@@ -32,24 +32,27 @@ var app = new Vue({
         query: "",
         musicList: [],
         songCount: 0,
-        musicUrl:"",
-        offset:1
+        musicUrl: "",
+        musicOffset: 1,
+        commentOffset: 1,
+        picUrl:"",
+        baseUrl:"http://localhost:3000/",
+        musicId:""
     },
     methods: {
         getMusic(method) {
             var vue = this;
-            if (method=='prev'){
-                vue.offset --;
-            }else {
-                vue.offset ++;
+            if (method == 'prev') {
+                vue.musicOffset--;
+            } else {
+                vue.musicOffset++;
             }
-            axios.get("http://localhost:3000/search?keywords=" + vue.query+"&limit=30&offset="+vue.offset).then(
+            axios.get(vue.baseUrl+"search?keywords=" + vue.query + "&limit=30&offset=" + vue.musicOffset).then(
                 function (response) {
-                    if (response==undefined){
+                    if (response == undefined) {
                         return;
                     }
-                    var songData =response.data.result;
-                    console.log(songData);
+                    var songData = response.data.result;
 
                     vue.songCount = songData.songCount;
                     vue.musicList = songData.songs;
@@ -62,19 +65,43 @@ var app = new Vue({
             );
 
         },
-        getMusicUrl(musicId){
+        //获取歌曲详情
+        getMusicDetail(musicId) {
             var vue = this;
-            axios.get("http://localhost:3000/song/url?id="+musicId).then(
+            //获取歌曲url
+            axios.get(vue.baseUrl+"song/url?id=" + musicId).then(
                 function (response) {
-                  var detail =   response.data.data[0];
-                  console.log(detail);
-                  vue.musicUrl = detail.url;
+                    var detail = response.data.data[0];
+                    vue.musicUrl = detail.url;
                 },
                 function (err) {
 
                 }
-
             );
+
+            //获取歌曲封面
+            axios.get(vue.baseUrl+"song/detail?ids=" + musicId).then(
+                function (response) {
+
+
+                    var album = response.data.songs[0].al;
+                    console.log(album);
+                    vue.picUrl = album.picUrl;
+
+                },
+                function (err) {
+
+                }
+            );
+
+
+
+        },
+
+        //获取歌曲评论
+        getMusicComment(musicId=this.musicId) {
+            //获取歌曲评论
+            axios.get(vue.baseUrl+"/comment/music?id="+musicId+"&limit=20&offset").then();
         }
     }
 });
