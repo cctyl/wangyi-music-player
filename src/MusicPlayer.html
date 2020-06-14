@@ -50,7 +50,7 @@
             </div>
 
             <!-- 歌曲信息容器 -->
-            <div class="player_con" class="playing">
+            <div class="player_con" :class="{playing : isPlay}">
                 <img src="images/player_bar.png" class="play_bar"/>
                 <!-- 黑胶碟片 -->
                 <img src="images/disc.png" class="disc autoRotate"/>
@@ -77,8 +77,8 @@
 
         </div>
 
-        <div class="audio_con">
-            <audio ref='audio' v-bind:src="musicUrl" controls autoplay loop class="myaudio"></audio>
+        <div class="audio_con" >
+            <audio ref='audio' @play="play" @pause="play"  v-bind:src="musicUrl" controls autoplay loop class="myaudio"></audio>
         </div>
 
         <div class="video_con" style="display: none;">

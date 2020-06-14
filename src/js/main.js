@@ -38,7 +38,8 @@ var app = new Vue({
         picUrl:"",
         baseUrl:"http://localhost:3000/",
         musicId:"",
-        hotCommentsArray:[]
+        hotCommentsArray:[],
+        isPlay:false
     },
     methods: {
         //歌曲搜索
@@ -119,6 +120,9 @@ var app = new Vue({
                 }
 
             );
+        },
+        play(){
+            this.isPlay=!this.isPlay;
         }
     }
 });
