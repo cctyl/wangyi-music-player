@@ -32,14 +32,15 @@
             <!-- 搜索歌曲列表 -->
             <div class='song_wrapper'>
                 <ul class="song_list">
-                    <li v-for="music in musicList">
-                        <a href="#" @click="getMusicUrl(music.id)" ></a>
-                        <b v-text="music.name">你好</b>
-                    </li>
                     <li v-show="songCount>0">
                         <button v-show="offset>1" @click="getMusic('prev')">上一页</button>
                         &nbsp;&nbsp;
                         <button v-show="offset<(songCount/30)" @click="getMusic('next')">下一页</button></li>
+                    <li v-for="music in musicList">
+                        <a href="#" @click="getMusicUrl(music.id)" ></a>
+                        <b v-text="music.name">你好</b>
+                    </li>
+
                     <li>搜索到的音乐数量：{{songCount}}</li>
                 </ul>
 
