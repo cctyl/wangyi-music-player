@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>vue音乐播放器</title>
+    <!-- 样式 -->
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/axios/dist/axios.js"></script>
+
+    <!--
+        1.如果在response中拿不到数据，那么在response后面加一个或者两个 data 再来取值
+            response.data.data
+          如果里面是数组，那么用 response.data.data[0] 来取值
+    -->
+
+</head>
+
+<body>
+<div class="wrap">
+    <!-- 播放器主体区域 -->
+    <div class="play_wrap" id="player">
+        <div class="search_bar">
+            <img src="images/player_title.png" alt=""/>
+            <!-- 搜索歌曲 -->
+            <input type="text" autocomplete="off" v-model="query" @keyup.enter="getMusic()"/>
+        </div>
+        <div class="center_con">
+            <!-- 搜索歌曲列表 -->
+            <div class='song_wrapper'>
+                <ul class="song_list">
+                    <li v-for="music in musicList">
+                        <a href="#" @click="getMusicUrl(music.id)" ></a>
+                        <b v-text="music.name">你好</b>
+                    </li>
+                    <li v-show="songCount>0">
+                        <button v-show="offset>1" @click="getMusic('prev')">上一页</button>
+                        &nbsp;&nbsp;
+                        <button v-show="offset<(songCount/30)" @click="getMusic('next')">下一页</button></li>
+                    <li>搜索到的音乐数量：{{songCount}}</li>
+                </ul>
+
+                <img src="images/line.png" class="switch_btn" alt="">
+            </div>
+
+            <!-- 歌曲信息容器 -->
+            <div class="player_con" class="playing">
+                <img src="images/player_bar.png" class="play_bar"/>
+                <!-- 黑胶碟片 -->
+                <img src="images/disc.png" class="disc autoRotate"/>
+                <img src="images/cover.png" class="cover autoRotate"/>
+            </div>
+
+
+            <!-- 评论容器 -->
+            <div class="comment_wrapper">
+                <h5 class='title'>热门留言</h5>
+                <div class='comment_list'>
+                    <dl>
+                        <dt><img src="./images/person.png" alt=""></dt>
+                        <dd class="name">盐焗西兰花</dd>
+                        <dd class="detail">
+                            绝对值得一听，吹爆
+                        </dd>
+                    </dl>
+                </div>
+                <img src="images/line.png" class="right_line">
+            </div>
+
+        </div>
+
+        <div class="audio_con">
+            <audio ref='audio' v-bind:src="musicUrl" controls autoplay loop class="myaudio"></audio>
+        </div>
+
+        <div class="video_con" style="display: none;">
+            <video controls="controls"></video>
+            <div class="mask"></div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+<script src="./js/main.js"></script>
+</html>
